@@ -21,6 +21,8 @@ Backend	Django 5+, Python 3.10+
 Agent Script	Python (psutil, requests)
 Database	SQLite (local), PostgreSQL (production ready)
 Deployment	Render, Railway, or any VPS
+
+
 🧩 Architecture Overview
 ┌────────────────────┐       ┌──────────────────────────────┐
 │  SysWatch Agent 🖥️ │  ─▶  │  Django API (/receive/) 📡  │
