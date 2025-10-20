@@ -1,0 +1,95 @@
+# ==========================
+# Django & Python
+# ==========================
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.sqlite3
+db.sqlite3
+*.log
+*.pot
+*.mo
+
+# Environment
+.env
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+*.env
+.env.local
+
+# Django specific
+/media/
+staticfiles/
+static_root/
+static_cdn/
+node_modules/
+build/
+dist/
+*.db
+local_settings.py
+
+# SysWatch agent identity file
+syswatch_id.json
+
+# IDE / Editor junk
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs & temp
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.orig
+*.old
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Coverage / Testing
+.coverage
+.tox/
+.nox/
+.pytest_cache/
+.coverage.*
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+test-results/
+
+# Jupyter / Notebooks
+.ipynb_checkpoints/
+
+# MyPy / Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pylint / Ruff
+.pylint.d/
+.ruff_cache/
+
+# Backup or temporary files
+*~

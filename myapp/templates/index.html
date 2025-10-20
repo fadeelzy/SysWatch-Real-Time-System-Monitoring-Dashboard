@@ -1,0 +1,196 @@
+<!DOCTYPE html> 
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SysWatch - Real-time System Observability Dashboard</title>
+    <meta name="description" content="Monitor CPU, RAM, disk usage, and network latency in real-time with SysWatch">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div class="nav-brand">
+                <div class="nav-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                </div>
+                <span class="nav-title">SysWatch</span>
+            </div>
+            <div class="nav-status">
+                <div class="status-indicator"></div>
+                <span>Live Monitoring</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                </div>
+                
+                <h1 class="hero-title">SysWatch</h1>
+                <p class="hero-subtitle">Real-time system observability dashboard for monitoring critical infrastructure metrics</p>
+                <p class="hero-description">
+                    SysWatch provides comprehensive monitoring of your system's vital signs. Track CPU performance, 
+                    memory utilization, disk capacity, and network latency in real-time with intuitive visualizations 
+                    and intelligent alerting when metrics exceed defined thresholds.
+                </p>
+                <h2 id="hostname" class="text-gray-600 text-sm"></h2>
+                <div class="features-grid">
+                    <div class="feature-card feature-cpu">
+                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                            <rect x="9" y="9" width="6" height="6"></rect>
+                            <line x1="9" y1="1" x2="9" y2="4"></line>
+                            <line x1="15" y1="1" x2="15" y2="4"></line>
+                            <line x1="9" y1="20" x2="9" y2="23"></line>
+                            <line x1="15" y1="20" x2="15" y2="23"></line>
+                            <line x1="20" y1="9" x2="23" y2="9"></line>
+                            <line x1="20" y1="14" x2="23" y2="14"></line>
+                            <line x1="1" y1="9" x2="4" y2="9"></line>
+                            <line x1="1" y1="14" x2="4" y2="14"></line>
+                        </svg>
+                        <h3>CPU Usage</h3>
+                        <p>Monitor processor load and performance in real-time</p>
+                    </div>
+
+                    <div class="feature-card feature-ram">
+                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                        <h3>RAM Usage</h3>
+                        <p>Track memory consumption and availability</p>
+                    </div>
+
+                    <div class="feature-card feature-disk">
+                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="12" x2="2" y2="12"></line>
+                            <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
+                            <line x1="6" y1="16" x2="6.01" y2="16"></line>
+                            <line x1="10" y1="16" x2="10.01" y2="16"></line>
+                        </svg>
+                        <h3>Disk Usage</h3>
+                        <p>Keep track of storage capacity and trends</p>
+                    </div>
+
+                    <div class="feature-card feature-ping">
+                        <svg class="feature-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                            <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                            <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                        </svg>
+                        <h3>Ping Latency</h3>
+                        <p>Measure network response times and reliability</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section class="dashboard">
+        <div class="container">
+            <!-- Alert Banner -->
+            <div id="alert-container"></div>
+
+            <!-- Loading Spinner -->
+            <div id="loading-spinner" class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading metrics...</p>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="charts-grid" id="charts-grid" style="display: none;">
+                <!-- CPU Chart -->
+                <div class="chart-card chart-cpu">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <svg class="chart-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                                <rect x="9" y="9" width="6" height="6"></rect>
+                            </svg>
+                            <span>CPU Usage</span>
+                        </div>
+                        <div class="chart-value" id="cpu-value">0%</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="cpu-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- RAM Chart -->
+                <div class="chart-card chart-ram">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <svg class="chart-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                            <span>RAM Usage</span>
+                        </div>
+                        <div class="chart-value" id="ram-value">0%</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="ram-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Disk Chart -->
+                <div class="chart-card chart-disk">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <svg class="chart-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="12" x2="2" y2="12"></line>
+                                <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path>
+                            </svg>
+                            <span>Disk Usage</span>
+                        </div>
+                        <div class="chart-value" id="disk-value">0%</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="disk-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Ping Chart -->
+                <div class="chart-card chart-ping">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <svg class="chart-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                                <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                            </svg>
+                            <span>Ping Latency</span>
+                        </div>
+                        <div class="chart-value" id="ping-value">0ms</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="ping-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🧠 System Logs Section -->
+            <div class="system-logs">
+                <h3>Recent System Logs</h3>
+                <ul id="alert-log">
+                    <li>No alerts yet. Monitoring live...</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <script src="{% static 'dashboard.js' %}"></script>
+</body>
+</html>
