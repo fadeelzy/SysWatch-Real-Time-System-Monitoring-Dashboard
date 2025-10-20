@@ -25,14 +25,9 @@ Deployment	Render, Railway, or any VPS
 
 🧩 Architecture Overview
   
- SysWatch Agent 🖥️   ─▶   Django API (/receive/) 📡  
- (Python + psutil)          Stores & updates metrics    
+ SysWatch Agent  (Python + psutil)  🖥️   ─▶   Django API (/receive/) Stores & updates metrics 📡   ─▶  SysWatch Dashboard 🌐  (Chart.js + Realtime Fetch 
+  
        
-                                            │
-                                            ▼
-                            
-                                SysWatch Dashboard 🌐        
-                               (Chart.js + Realtime Fetch)  
                               
 
 💻 Local Setup
