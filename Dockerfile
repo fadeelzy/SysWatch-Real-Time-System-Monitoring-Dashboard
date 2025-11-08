@@ -30,4 +30,4 @@ RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 
 # Run the app with Gunicorn
-CMD ["sh", "-c", "gunicorn expenseproject.wsgi:application --bind 0.0.0.0:$PORT"]
+CMD ["sh", "-c", "gunicorn sysproject.wsgi:application --bind 0.0.0.0:$PORT"]
