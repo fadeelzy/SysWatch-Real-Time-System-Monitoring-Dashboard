@@ -14,3 +14,16 @@ from django.core.wsgi import get_wsgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sysproject.settings')
 
 application = get_wsgi_application()
+
+# sysproject/wsgi.py
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sysproject.settings')
+
+# Run migrations automatically
+import django
+django.setup()
+from django.core.management import call_command
+call_command('migrate', interactive=False)
+
+application = get_wsgi_application()
