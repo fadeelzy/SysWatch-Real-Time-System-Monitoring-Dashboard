@@ -73,13 +73,19 @@ WSGI_APPLICATION = 'sysproject.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 import os
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Base directory of your Django project
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Use persistent disk path or fallback to /tmp
-SQLITE_PATH = os.environ.get("SQLITE_PATH", "/data/db.sqlite3")
+SQLITE_PATH = os.environ.get(
+    "SQLITE_PATH",
+    BASE_DIR / "db.sqlite3"
+)
+
+# Ensure parent folder exists
+SQLITE_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 DATABASES = {
     "default": {
@@ -87,6 +93,18 @@ DATABASES = {
         "NAME": SQLITE_PATH,
     }
 }
+
+
+
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret-key")
+DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
+
+
+# Media files
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
