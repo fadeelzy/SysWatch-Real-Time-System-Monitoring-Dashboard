@@ -31,8 +31,7 @@ import os              # For file handling
 import socket          # To get the system hostname automatically
 
 # 🌐 Your backend endpoint (update this when deployed)
-SERVER_URL = "http://127.0.0.1:8000/api/agent/metrics/"  # Replace later with your live server URL
-
+SERVER_URL = "https://syswatch-6c1r.onrender.com/api/agent/metrics/"
 # 🕒 How often to send updates (in seconds)
 UPDATE_INTERVAL = 5
 
