@@ -78,8 +78,8 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Using Render Persistent Disk for SQLite
-SQLITE_PATH = os.environ.get("SQLITE_PATH", os.path.join(BASE_DIR, "db.sqlite3"))
+# Use persistent disk path or fallback to /tmp
+SQLITE_PATH = os.environ.get("SQLITE_PATH", "/data/db.sqlite3")
 
 DATABASES = {
     "default": {
@@ -87,7 +87,6 @@ DATABASES = {
         "NAME": SQLITE_PATH,
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
