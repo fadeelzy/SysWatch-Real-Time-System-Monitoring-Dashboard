@@ -75,11 +75,12 @@ WSGI_APPLICATION = 'sysproject.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 import os
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Using Render Persistent Disk for SQLite
-SQLITE_PATH = os.environ.get("SQLITE_PATH", os.path.join(BASE_DIR, "db.sqlite3"))
+SQLITE_PATH = os.environ.get(
+    "SQLITE_PATH",
+    os.path.join("/mnt/sqlite", "db.sqlite3")  # <- Render Persistent Disk
+)
 
 DATABASES = {
     "default": {
@@ -87,6 +88,7 @@ DATABASES = {
         "NAME": SQLITE_PATH,
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
