@@ -15,44 +15,34 @@ METRICS_DATA = {}
 @csrf_exempt
 def receive_metrics(request):
     if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            system_id = data.get("system_id")
-            if not system_id:
-                return JsonResponse({"error": "Missing system_id"}, status=400)
+        data = json.loads(request.body.decode("utf-8"))
 
-            # Save metrics temporarily
-            METRICS_DATA[system_id] = {
-                "cpu": data.get("cpu", 0),
-                "ram": data.get("ram", 0),
-                "disk": data.get("disk", 0),
-                "ping": data.get("ping", 0),
-                "hostname": data.get("hostname", "Unknown"),
+        system_id = data.get("system_id")
+        hostname = data.get("hostname")
+        cpu = data.get("cpu")
+        ram = data.get("ram")
+        disk = data.get("disk")
+        ping = data.get("ping")
+
+        # Update or create metrics
+        SystemMetric.objects.update_or_create(
+            system_id=system_id,
+            defaults={
+                "hostname": hostname,
+                "cpu": cpu,
+                "memory": ram,
+                "disk": disk,
+                "ping": ping
             }
+        )
 
-            # Save to DB (last updated metrics)
-            SystemMetric.objects.update_or_create(
-                system_id=system_id,
-                defaults={
-                    "cpu": data.get("cpu"),
-                    "ram": data.get("ram"),
-                    "disk": data.get("disk"),
-                    "hostname": data.get("hostname"),
-                }
-            )
+        # ✅ HERE IS THE MAGIC FIX
+        dashboard_url = f"https://syswatch-6c1r.onrender.com/dashboard?system_id={system_id}"
 
-            # ✅ FULL dashboard link for Agent to show
-            dashboard_url = f"https://syswatch-6c1r.onrender.com/view/{system_id}/"
-
-            return JsonResponse({
-                "status": "ok",
-                "dashboard_url": dashboard_url
-            })
-
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON"}, status=400)
-
-    return JsonResponse({"error": "Invalid request method"}, status=405)
+        return JsonResponse({
+            "status": "ok",
+            "dashboard_url": dashboard_url  # <-- Send link back to agent
+        })
 
 # --------- API endpoints for the dashboard.js frontend ---------
 
