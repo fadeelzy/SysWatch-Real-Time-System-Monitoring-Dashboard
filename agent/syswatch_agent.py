@@ -18,6 +18,8 @@ HOW TO USE (BEGINNER FRIENDLY):
    - Type:    python --version
    - If it shows a version number, you're good.
    - If not → Download Python here: https://www.python.org/downloads/
+   - run this command just incase pip is not installed on your computer: python -m ensurepip --default-pip
+   - run this command to install dependencies: pip install psutil requests
 
 2. Save this file somewhere (example: Desktop).
 

@@ -12,21 +12,8 @@ from .models import SystemMetric
 
 # Store latest metrics for each connected system (in-memory for now)
 METRICS_DATA = {}
-
 @csrf_exempt
 def receive_metrics(request):
-    """
-    Endpoint where the syswatch_agent.py sends live system data.
-    Example JSON:
-    {
-        "system_id": "unique-client-id",
-        "hostname": "MyLaptop",
-        "cpu": 45.3,
-        "ram": 62.1,
-        "disk": 70.4,
-        "ping": 42.0
-    }
-    """
     if request.method == "POST":
         try:
             data = json.loads(request.body)
@@ -34,7 +21,7 @@ def receive_metrics(request):
             if not system_id:
                 return JsonResponse({"error": "Missing system_id"}, status=400)
 
-            # Save metrics temporarily (for frontend use)
+            # Save metrics temporarily
             METRICS_DATA[system_id] = {
                 "cpu": data.get("cpu", 0),
                 "ram": data.get("ram", 0),
@@ -43,7 +30,7 @@ def receive_metrics(request):
                 "hostname": data.get("hostname", "Unknown"),
             }
 
-            # Optionally persist to DB for history tracking
+            # Save to DB (last updated metrics)
             SystemMetric.objects.update_or_create(
                 system_id=system_id,
                 defaults={
@@ -54,17 +41,18 @@ def receive_metrics(request):
                 }
             )
 
-            # Return dashboard link for the agent to display
+            # ✅ FULL dashboard link for Agent to show
+            dashboard_url = f"https://syswatch-6c1r.onrender.com/view/{system_id}/"
+
             return JsonResponse({
                 "status": "ok",
-                "dashboard_url": f"/view/{system_id}/"
+                "dashboard_url": dashboard_url
             })
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=400)
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
-
 
 # --------- API endpoints for the dashboard.js frontend ---------
 
