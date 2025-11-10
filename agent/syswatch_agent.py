@@ -42,9 +42,7 @@ WHAT YOU WILL SEE:
 - The dashboard link will be printed once data is received by your server.
 
 --------------------------------------------------------------------------------
-IMPORTANT:
-Update the SERVER_URL below to match your deployed SysWatch API endpoint.
---------------------------------------------------------------------------------
+
 """
 
 # ============================= CONFIGURATION ==================================

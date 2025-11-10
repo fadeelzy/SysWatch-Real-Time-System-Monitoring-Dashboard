@@ -1,4 +1,4 @@
-// SysWatch Dashboard - Main JavaScript File
+// SysWatch Dashboard - Main JavaScript File 
 
 // Configuration
 const MAX_DATA_POINTS = 20;
@@ -43,16 +43,32 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 // Fetch hostname
 async function fetchHostname() {
+    const hostElem = document.getElementById("hostname");
+    if (!hostElem) return;
+
+    // Step 1: Use Django-rendered hostname if available
+    if (hostElem.textContent && hostElem.textContent.trim() !== "") {
+        console.log("Initial hostname from template:", hostElem.textContent);
+    }
+
+    // Step 2: Fetch latest hostname from API
     const url = `${BASE_URL}/hostname/`;
     console.log("Fetching hostname from:", url);
+
     try {
         const response = await fetch(url, { cache: "no-cache" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
-        document.getElementById("hostname").textContent = data.hostname || "Unknown Host";
-        console.log("Hostname received:", data.hostname);
+
+        if (data.hostname && data.hostname !== "Unknown") {
+            hostElem.textContent = data.hostname;
+            console.log("Updated hostname from API:", data.hostname);
+        }
     } catch (err) {
         console.error("Error fetching hostname:", err);
-        document.getElementById("hostname").textContent = "Waiting for agent connection...";
+        if (!hostElem.textContent || hostElem.textContent === "Unknown Host") {
+            hostElem.textContent = "Waiting for agent connection...";
+        }
     }
 }
 
