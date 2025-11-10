@@ -10,7 +10,7 @@ from .models import SystemMetric
 # Create your views here.
 
 
-# Store latest metrics for each connected system (in-memory for now)
+# Store latest metrics for each connected system
 METRICS_DATA = {}
 @csrf_exempt
 def receive_metrics(request):
@@ -24,7 +24,7 @@ def receive_metrics(request):
         disk = data.get("disk")
         ping = data.get("ping")
 
-        # Update or create metrics
+        # Save to DB
         SystemMetric.objects.update_or_create(
             system_id=system_id,
             defaults={
@@ -36,12 +36,21 @@ def receive_metrics(request):
             }
         )
 
-        # ✅ HERE IS THE MAGIC FIX
-        dashboard_url = f"https://syswatch-6c1r.onrender.com/dashboard?system_id={system_id}"
+        #  Save to live metrics memory store
+        METRICS_DATA[system_id] = {
+            "hostname": hostname,
+            "cpu": cpu,
+            "ram": ram,
+            "disk": disk,
+            "ping": ping,
+        }
+
+        # ✅ Return correct dashboard link
+        dashboard_url = f"https://syswatch-6c1r.onrender.com/view/{system_id}/"
 
         return JsonResponse({
             "status": "ok",
-            "dashboard_url": dashboard_url  # <-- Send link back to agent
+            "dashboard_url": dashboard_url
         })
 
 # --------- API endpoints for the dashboard.js frontend ---------
