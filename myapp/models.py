@@ -7,6 +7,7 @@ class SystemMetric(models.Model):
     cpu = models.FloatField(default=0)
     ram = models.FloatField(default=0)
     disk = models.FloatField(default=0)
+    ping = models.FloatField(null=True, blank=True) 
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
