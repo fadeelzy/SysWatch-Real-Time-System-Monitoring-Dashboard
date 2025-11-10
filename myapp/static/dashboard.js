@@ -12,11 +12,13 @@ const THRESHOLDS = {
     ping: { warning: 100, critical: 150 }
 };
 
-// Try to extract client ID from URL, e.g. /view/<client_id>
-const CLIENT_ID = window.location.pathname.split("/view/")[1] || "demo-client";
+// Extract client ID from URL: /view/<client_id>
+const CLIENT_ID = (window.location.pathname.split("/view/")[1] || "demo-client").replace("/", "");
+console.log("Detected CLIENT_ID:", CLIENT_ID);
 
-// Auto-detect backend base URL
+// Base URL for API
 const BASE_URL = `${window.location.origin}/api/metrics/${CLIENT_ID}`;
+console.log("BASE_URL for fetching metrics:", BASE_URL);
 
 // Data storage
 let metricsData = { cpu: [], ram: [], disk: [], ping: [] };
@@ -32,35 +34,39 @@ const COLORS = {
     ping: { border: '#3b82f6', background: 'rgba(59, 130, 246, 0.2)' }
 };
 
-// Initialize when page loads
+// Initialize charts when page loads
 document.addEventListener("DOMContentLoaded", async function () {
     initializeCharts();
     await fetchHostname();
     startMonitoring();
 });
 
-// Fetch client hostname (optional — stored when the agent reports)
+// Fetch hostname
 async function fetchHostname() {
+    const url = `${BASE_URL}/hostname/`;
+    console.log("Fetching hostname from:", url);
     try {
-        const response = await fetch(`${BASE_URL}/hostname/`);
-        if (!response.ok) throw new Error();
+        const response = await fetch(url, { cache: "no-cache" });
         const data = await response.json();
         document.getElementById("hostname").textContent = data.hostname || "Unknown Host";
+        console.log("Hostname received:", data.hostname);
     } catch (err) {
+        console.error("Error fetching hostname:", err);
         document.getElementById("hostname").textContent = "Waiting for agent connection...";
     }
 }
 
-// Fetch metric data from backend
-async function fetchMetricData(endpoint) {
-    const url = `${BASE_URL}/${endpoint}/`;
+// Fetch a single metric
+async function fetchMetricData(metric) {
+    const url = `${BASE_URL}/${metric}/`;
     try {
         const response = await fetch(url, { cache: "no-cache" });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
+        console.log(`Metric fetched - ${metric}:`, data.value);
         return data.value ?? 0;
     } catch (error) {
-        console.error(`Error fetching ${endpoint}:`, error);
+        console.error(`Error fetching ${metric}:`, error);
         return 0;
     }
 }
@@ -160,7 +166,7 @@ function checkAlerts(metrics) {
     const alerts = [];
     for (const metric in THRESHOLDS) {
         const { warning, critical } = THRESHOLDS[metric];
-        const value = metrics[metric];
+        const value = metrics[metric] ?? 0;
         const labelMap = { cpu: 'CPU', ram: 'RAM', disk: 'Disk', ping: 'Ping' };
         if (value >= critical) alerts.push({ type: 'critical', metric: labelMap[metric], value, threshold: critical });
         else if (value >= warning) alerts.push({ type: 'warning', metric: labelMap[metric], value, threshold: warning });
@@ -197,6 +203,7 @@ async function updateMetrics() {
         updateChart('ram', ram);
         updateChart('disk', disk);
         updateChart('ping', ping);
+
         checkAlerts({ cpu, ram, disk, ping });
     } catch (error) {
         console.error('Error updating metrics:', error);
