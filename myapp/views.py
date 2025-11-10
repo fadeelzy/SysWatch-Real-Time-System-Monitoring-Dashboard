@@ -56,9 +56,8 @@ def receive_metrics(request):
 # --------- API endpoints for the dashboard.js frontend ---------
 def get_metric_value(request, system_id, metric):
     """
-    Returns the requested metric value for a specific system.
-    Falls back to database if not in METRICS_DATA.
-    Example: /api/metrics/<system_id>/cpu/
+    Returns the requested metric value for a system.
+    Reads from METRICS_DATA if available, otherwise falls back to DB.
     """
     system_data = METRICS_DATA.get(system_id)
 
@@ -73,8 +72,7 @@ def get_metric_value(request, system_id, metric):
                 "ping": system.ping,
                 "hostname": system.hostname,
             }
-            # Cache it in memory for future requests
-            METRICS_DATA[system_id] = system_data
+            METRICS_DATA[system_id] = system_data  # cache in memory
         else:
             return JsonResponse({"value": 0, "error": "System not found"}, status=404)
 
@@ -88,7 +86,7 @@ def get_metric_value(request, system_id, metric):
 def get_hostname(request, system_id):
     """
     Returns the hostname of the monitored system.
-    Falls back to DB if not in METRICS_DATA.
+    Reads from METRICS_DATA if available, otherwise falls back to DB.
     """
     system_data = METRICS_DATA.get(system_id)
 
@@ -96,14 +94,13 @@ def get_hostname(request, system_id):
         # fallback to DB
         system = SystemMetric.objects.filter(system_id=system_id).first()
         if system:
-            system_data = {
-                "hostname": system.hostname,
-            }
+            system_data = {"hostname": system.hostname}
             METRICS_DATA[system_id] = system_data
         else:
             return JsonResponse({"hostname": "Unknown"}, status=404)
 
     return JsonResponse({"hostname": system_data.get("hostname", "Unknown")})
+
 
 # --------- Local system monitoring (optional, for testing locally) ---------
 

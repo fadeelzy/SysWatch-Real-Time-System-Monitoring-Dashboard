@@ -70,20 +70,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sysproject.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 import os
 from pathlib import Path
 
 # Base directory of your Django project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Get path from environment or default
-SQLITE_PATH = os.environ.get("SQLITE_PATH", BASE_DIR / "db.sqlite3")
-
-# Convert to Path object to use .parent
-SQLITE_PATH = Path(SQLITE_PATH)
+# ---------- SQLite persistent path ----------
+# On Render, mount a persistent volume at /data
+# Fallback to local BASE_DIR for local development
+SQLITE_PATH = Path(os.environ.get("SQLITE_PATH", BASE_DIR / "db.sqlite3"))
 
 # Ensure parent folder exists
 SQLITE_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -95,6 +91,7 @@ DATABASES = {
     }
 }
 
+# ---------- General settings ----------
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-secret-key")
 DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
@@ -102,7 +99,6 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",")
 # Media files
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
