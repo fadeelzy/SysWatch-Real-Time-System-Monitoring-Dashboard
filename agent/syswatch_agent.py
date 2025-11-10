@@ -49,7 +49,7 @@ Update the SERVER_URL below to match your deployed SysWatch API endpoint.
 
 # ============================= CONFIGURATION ==================================
 
-SERVER_URL = SERVER_URL = "https://syswatch-6c1r.onrender.com/api/agent/metrics/"  
+SERVER_URL = "https://syswatch-6c1r.onrender.com/api/agent/metrics/"  
 UPDATE_INTERVAL = 5   # How often to send metrics (seconds)
 IDENTITY_FILE = "syswatch_id.json"
 
