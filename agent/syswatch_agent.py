@@ -117,26 +117,35 @@ def collect_metrics():
 
 
 def send_metrics(system_id, metrics):
-    """Send metrics to the backend server."""
+    """Send metrics to the backend server with detailed logging."""
     try:
-        response = requests.post(SERVER_URL,
-                                 json={"system_id": system_id, **metrics},
-                                 headers={"Content-Type": "application/json"},
-                                 timeout=10)
+        print(f"\n📡 Sending metrics for {metrics['hostname']} ({system_id[:8]}...) to {SERVER_URL}")
+        print("   Payload:", json.dumps({"system_id": system_id, **metrics}, indent=2))
+
+        response = requests.post(
+            SERVER_URL,
+            json={"system_id": system_id, **metrics},
+            headers={"Content-Type": "application/json"},
+            timeout=10
+        )
+
+        print(f"🖥 Server responded with status: {response.status_code}")
+        try:
+            print("   Response body:", response.json())
+        except Exception:
+            print("   Response body is not valid JSON:", response.text)
 
         if response.status_code == 200:
-            print(f"✅ Sent metrics for {metrics['hostname']} ({system_id[:8]}...)")
-            try:
-                data = response.json()
-                if "dashboard_url" in data:
-                    print(f"🌍 View dashboard: {data['dashboard_url']}\n")
-            except:
-                pass
+            print(f"✅ Metrics successfully sent for {metrics['hostname']} ({system_id[:8]}...)")
+            if "dashboard_url" in response.json():
+                print(f"🌍 View dashboard: {response.json()['dashboard_url']}\n")
         else:
-            print(f"⚠️ Server responded with status: {response.status_code}")
+            print(f"⚠️ Warning: Server returned status {response.status_code}")
 
+    except requests.exceptions.RequestException as e:
+        print("❌ Network error while sending metrics:", e)
     except Exception as e:
-        print("❌ Error sending metrics:", e)
+        print("❌ Unexpected error while sending metrics:", e)
 
 
 def run_agent():
