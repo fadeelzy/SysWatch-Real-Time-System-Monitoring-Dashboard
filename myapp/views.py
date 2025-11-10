@@ -30,7 +30,7 @@ def receive_metrics(request):
             defaults={
                 "hostname": hostname,
                 "cpu": cpu,
-                "memory": ram,
+                "ram": ram,
                 "disk": disk,
                 "ping": ping
             }
