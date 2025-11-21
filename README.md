@@ -6,20 +6,32 @@ It allows you to view live CPU, RAM, Disk, and Network Ping statistics from any 
 🚀 Features
 
 ✅ Real-time system monitoring (CPU, RAM, Disk, Ping)
+
 ✅ Agent script that works on Windows, macOS, and Linux
+
 ✅ Auto-generated unique system ID per device
+
 ✅ Visual charts using Chart.js
+
 ✅ Smart threshold alerts for high usage
+
 ✅ Scalable Django backend API
+
 ✅ Responsive UI dashboard
 
 
 ⚙️ Tech Stack
+
 Layer	Technology
+
 Frontend	HTML, CSS, JavaScript, Chart.js
+
 Backend	Django 5+, Python 3.10+
+
 Agent Script	Python (psutil, requests)
+
 Database	SQLite (local), PostgreSQL (production ready)
+
 Deployment	Render, Railway, or any VPS
 
 
